@@ -1,0 +1,563 @@
+/* ==========================================================================
+   Activity list  (prefix: alp-)
+   The list inside the box a count card opens: All / In Progress / Completed /
+   Upcoming activities (rendered by assets/js/components/activity-list.js).
+   It sits in .ash-panel, whose tone class supplies --icon (the count's
+   colour) and --panel-top (the tint the header sits on). The list is a size
+   container: below 720px wide the table turns into one card per activity.
+   ========================================================================== */
+
+.alp {
+  container: alp / inline-size;
+  color: #1b2340;
+}
+
+/* ---------- header ---------- */
+
+.alp-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px 18px;
+}
+
+.alp-head-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--icon) 65%, #fff) 0%, var(--icon) 100%);
+  box-shadow: 0 8px 16px -8px color-mix(in srgb, var(--icon) 75%, transparent);
+}
+
+.alp-head-icon svg {
+  width: 52%;
+  height: 52%;
+}
+
+.alp-head-text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* inline, so the count stays right after the title even when it wraps */
+.alp-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #0d1b4b;
+}
+
+.alp-title-end { white-space: nowrap; }
+
+.alp-count {
+  display: inline-grid;
+  place-items: center;
+  margin-left: 8px;
+  vertical-align: 2px;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--icon);
+  background: color-mix(in srgb, var(--icon) 10%, #fff);
+}
+
+.alp-sub {
+  margin: 3px 0 0;
+  font-size: 13px;
+  color: #5b6478;
+}
+
+/* ---------- table ---------- */
+
+.alp-table {
+  margin: 0 24px 24px;
+}
+
+/* #, activity, progress, next action, linked to */
+.alp-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 2.5fr) minmax(0, 1.15fr) minmax(0, 1.45fr) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
+}
+
+.alp-row-head {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  background: #f4f6f9;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b7489;
+}
+
+.alp-row:not(.alp-row-head) {
+  min-height: 74px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eef0f4;
+  transition: background-color 0.15s ease;
+}
+
+.alp-row:not(.alp-row-head):last-child { border-bottom: 0; }
+.alp-row:not(.alp-row-head):hover { background: #fafbfd; }
+
+.alp-num {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f1f3f7;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #3a4560;
+}
+
+.alp-c-activity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.alp-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  color: var(--c);
+  background: var(--bg);
+}
+
+.alp-activity-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* a long title or note wraps onto more lines (the row grows) rather than being cut off */
+.alp-activity-title,
+.alp-activity-note {
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.alp-activity-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #0d1b4b;
+}
+
+.alp-activity-note {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: #6b7489;
+}
+
+/* a share ("73%") or a state pill, with the bar under it */
+.alp-c-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* wraps (the % under the pill) rather than spilling into the next column */
+.alp-progress-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  min-height: 22px;
+}
+
+.alp-progress-top strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0d1b4b;
+}
+
+.alp-progress-pct {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #3a4560;
+}
+
+.alp-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.alp-state::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.alp-state-pending { color: #c2410c; background: #fff1e6; }
+.alp-state-waiting { color: #0369a1; background: #e6f4fd; }
+
+/* "All Activities": the status of each row, in the colours of its own count */
+.alp-state-progress { color: #1d4ed8; background: #e8effe; }
+.alp-state-upcoming { color: #7e22ce; background: #f3e8ff; }
+.alp-state-completed { color: #15803d; background: #e6f6ea; }
+
+.alp-when-sub {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #6b7489;
+}
+
+/* its status column carries a pill and a date or bar, so it gets more of the row */
+.alp-list-total .alp-row {
+  grid-template-columns: 44px minmax(0, 2.1fr) minmax(0, 1.4fr) minmax(0, 1.35fr) minmax(0, 0.95fr);
+}
+
+/* in-progress bars stay blue here, though this box is orange */
+.alp-list-total .alp-bar > span { background: linear-gradient(90deg, #93b4fb 0%, #2563eb 100%); }
+
+/* the status filter buttons above the "All Activities" table */
+.alp-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 24px 16px;
+}
+
+.alp-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 8px 0 14px;
+  border: 1px solid #e3e7ee;
+  border-radius: 999px;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3a4560;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.alp-filter:hover { border-color: #cfd5df; }
+
+.alp-filter-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #f1f3f7;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.alp-filter[aria-pressed='true'] {
+  border-color: #0d1b4b;
+  background: #0d1b4b;
+  color: #fff;
+}
+
+.alp-filter[aria-pressed='true'] .alp-filter-count { background: rgba(255, 255, 255, 0.18); }
+
+.alp-bar {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #eceef2;
+}
+
+.alp-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--icon) 55%, #fff) 0%, var(--icon) 100%);
+}
+
+/* completed / upcoming: the date, with how far away an upcoming one is */
+.alp-when {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1b2340;
+  white-space: nowrap;
+}
+
+.alp-when-done { color: #16a34a; }
+.alp-when-icon { color: var(--icon); }
+
+.alp-when-stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.alp-until {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--icon) 80%, #0d1b4b);
+  background: color-mix(in srgb, var(--icon) 9%, #fff);
+}
+
+.alp-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e3e7ee;
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1b2340;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.alp-action svg {
+  flex-shrink: 0;
+  color: var(--icon);
+}
+
+.alp-action:hover {
+  border-color: color-mix(in srgb, var(--icon) 40%, #e3e7ee);
+  background: color-mix(in srgb, var(--icon) 5%, #fff);
+}
+
+.alp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bg);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--c);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+
+.alp-link:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 40%, transparent); }
+
+/* "Showing 5 of 16" and the button that shows the rest (long lists only) */
+.alp-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin: -8px 24px 0;
+  padding: 14px 16px 20px;
+  border-top: 1px solid #eef0f4;
+}
+
+.alp-foot-count {
+  font-size: 12.5px;
+  color: #6b7489;
+}
+
+.alp-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--icon) 28%, #e3e7ee);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--icon) 5%, #fff);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--icon) 78%, #0d1b4b);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.alp-more:hover {
+  border-color: color-mix(in srgb, var(--icon) 45%, #e3e7ee);
+  background: color-mix(in srgb, var(--icon) 10%, #fff);
+}
+
+.alp-more svg { transition: transform 0.2s ease; }
+.alp-more.is-open svg { transform: rotate(180deg); }
+
+.alp-filter:focus-visible,
+.alp-more:focus-visible,
+.alp-action:focus-visible,
+.alp-link:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--icon) 40%, transparent);
+  outline-offset: 2px;
+}
+
+/* icon and chip colours */
+.alp-tone-violet { --c: #7c3aed; --bg: #f1eafe; }
+.alp-tone-blue { --c: #2563eb; --bg: #e8f0fe; }
+.alp-tone-indigo { --c: #4f46e5; --bg: #ecebfd; }
+.alp-tone-green { --c: #16a34a; --bg: #e6f6ea; }
+.alp-tone-amber { --c: #d97706; --bg: #fef3dc; }
+.alp-tone-teal { --c: #0f9488; --bg: #def5f1; }
+.alp-tone-purple { --c: #9333ea; --bg: #f4e8fe; }
+
+@media (prefers-reduced-motion: reduce) {
+  .alp-row,
+  .alp-action,
+  .alp-link,
+  .alp-filter,
+  .alp-more,
+  .alp-more svg { transition: none; }
+}
+
+/* ---------- narrow: one card per activity ---------- */
+
+@container alp (max-width: 720px) {
+  .alp-head { padding: 16px 16px 14px; }
+  .alp-title { font-size: 16.5px; }
+
+  .alp-filters { margin: 0 12px 12px; }
+
+  .alp-table {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 12px 12px;
+  }
+
+  .alp-row-head { display: none; }
+
+  .alp-row:not(.alp-row-head) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'num activity activity'
+      'progress progress progress'
+      'action action link';
+    row-gap: 14px;
+    column-gap: 12px;
+    padding: 14px;
+    border: 1px solid #eef0f4;
+    border-radius: 14px;
+  }
+
+  .alp-row:not(.alp-row-head):last-child { border-bottom: 1px solid #eef0f4; }
+
+  .alp-c-num { grid-area: num; }
+  .alp-c-activity { grid-area: activity; }
+  .alp-c-progress { grid-area: progress; }
+  .alp-c-action { grid-area: action; }
+  .alp-c-link { grid-area: link; }
+
+  .alp-bar { max-width: none; }
+
+  /* the action button wraps its label rather than running into the "Linked to" chip */
+  .alp-c-action { min-width: 0; }
+
+  .alp-action {
+    height: auto;
+    min-height: 36px;
+    padding-block: 7px;
+    line-height: 1.3;
+    text-align: left;
+    white-space: normal;
+  }
+
+  .alp-foot {
+    margin: 0 12px;
+    padding: 12px 4px 16px;
+    border-top: 0;
+  }
+}
+
+/* small phones: tighter cards so the activity text keeps a readable width; the section chip gets
+   its own line and the action becomes a full-width button at the bottom of the card */
+@container alp (max-width: 420px) {
+  .alp-row:not(.alp-row-head) {
+    grid-template-areas:
+      'num activity activity'
+      'progress progress progress'
+      'link link link'
+      'action action action';
+  }
+
+  .alp-action {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .alp-filters { gap: 6px; }
+
+  .alp-filter {
+    height: 32px;
+    padding: 0 6px 0 11px;
+    font-size: 12.5px;
+  }
+
+  .alp-row:not(.alp-row-head) {
+    column-gap: 10px;
+    padding: 12px;
+  }
+
+  .alp-num {
+    width: 24px;
+    height: 24px;
+    font-size: 11.5px;
+  }
+
+  .alp-c-activity { gap: 10px; }
+
+  .alp-icon {
+    width: 38px;
+    border-radius: 10px;
+  }
+
+  .alp-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .alp-foot { justify-content: center; }
+}

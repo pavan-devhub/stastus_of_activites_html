@@ -1,0 +1,352 @@
+/* ==========================================================================
+   Status hero  (prefix: ash-)
+   The banner that wraps the whole Status of Activities block: headline and
+   buttons on the left, the farmer photo behind a yellow / green curve on the
+   right. The banner is a size container: everything is sized in cqi (1% of
+   the banner's width) so it keeps the design's proportions at any width,
+   with clamps so text never gets too small. Below 760px wide it stacks.
+   The counts and the box they open are in activity-overview.css.
+   ========================================================================== */
+
+.ash {
+  --ash-navy: #0d1f4f;
+  --ash-green: #1d8a2f;
+  --ash-orange: #f26a12;
+  container-type: inline-size;
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  /* warm behind the hero only, in fixed lengths so the tall banner turns a clean off-white before
+     the counts and the board below them */
+  background:
+    radial-gradient(900px 520px at 8% 0%, rgba(255, 226, 190, 0.55) 0%, rgba(255, 236, 214, 0) 70%),
+    linear-gradient(180deg, #fff7ec 0px, #fffaf4 240px, #fdfcfb 420px, #fbfbfd 100%);
+  box-shadow: var(--ash-shadow);
+  font-family: var(--font-poppins);
+  color: var(--ash-navy);
+}
+
+/* faint white ring peeking in at the top-left corner */
+.ash::before {
+  content: '';
+  position: absolute;
+  left: -13cqi;
+  top: -27cqi;
+  width: 44cqi;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+}
+
+/* holds the photo's clip path */
+.ash-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ---------- top: copy on the left, photo on the right ---------- */
+
+.ash-top {
+  position: relative;
+  min-height: 29.7cqi;
+  display: flex;
+  align-items: center;
+}
+
+.ash-copy {
+  position: relative;
+  z-index: 2;
+  width: 38%;
+  padding: clamp(26px, 4cqi, 56px) 0 clamp(26px, 3.2cqi, 46px) 6.1cqi;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ash-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.62em 1.15em;
+  border-radius: 999px;
+  background: rgba(253, 235, 214, 0.75);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+  font-size: clamp(11.5px, 1.1cqi, 15px);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.ash-eyebrow svg {
+  width: 1.3em;
+  height: 1.3em;
+  margin-right: 0.25em;
+  fill: #16a34a;
+}
+
+.ash-eyebrow-a { color: #ea4f0c; }
+.ash-eyebrow-b { color: #166534; }
+
+.ash-title {
+  margin: clamp(8px, 0.9cqi, 13px) 0 0;
+  font-size: clamp(30px, 4.22cqi, 59px);
+  font-weight: 800;
+  line-height: 1.07;
+  letter-spacing: -0.005em;
+  color: var(--ash-navy);
+}
+
+.ash-title-green { color: var(--ash-green); }
+
+.ash-text {
+  margin: clamp(8px, 0.9cqi, 13px) 0 0;
+  /* wide enough for the second line, so the first breaks before "FEED's" as in the design */
+  max-width: 26.5em;
+  font-size: clamp(13.5px, 1.165cqi, 16.5px);
+  line-height: 1.6;
+  color: #1f2937;
+}
+
+.ash-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(12px, 2.2cqi, 30px);
+  margin-top: clamp(14px, 1.7cqi, 24px);
+}
+
+.ash-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  padding: 0 1.75em;
+  height: clamp(40px, 3.25cqi, 46px);
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: clamp(13px, 1.1cqi, 15.5px);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.ash-btn svg {
+  flex-shrink: 0;
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.ash-btn-solid {
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, #1c6f2c 0%, #145a22 100%);
+  box-shadow: 0 10px 22px rgba(20, 90, 34, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.ash-btn-outline {
+  border: 1.5px solid #2a8a3e;
+  color: #0f1d3d;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.ash-btn-outline svg { color: #1d8a2f; }
+
+.ash-btn:hover { transform: translateY(-2px); }
+.ash-btn-solid:hover { box-shadow: 0 14px 26px rgba(20, 90, 34, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.18); }
+.ash-btn-outline:hover { background: #f0fdf4; }
+
+.ash-btn:focus-visible {
+  outline: 3px solid rgba(29, 138, 47, 0.45);
+  outline-offset: 3px;
+}
+
+/* The photo box: the right 66% of the top, its left edge cut by the curve. */
+.ash-visual {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 34.3%;
+}
+
+.ash-photo {
+  position: absolute;
+  inset: 0;
+  background: #3f7f2a url('../../images/status/status-hero.webp') no-repeat;
+  background-size: cover;
+  background-position: 100% 25%;
+  -webkit-clip-path: url(#ash-photo-clip);
+  clip-path: url(#ash-photo-clip);
+}
+
+.ash-curve {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Left-aligned two-liner just clear of the curve; sizes in em of the quote's font size. */
+.ash-quote {
+  position: absolute;
+  z-index: 2;
+  left: 18.2%;
+  top: 21.8%;
+  margin: 0;
+  font-size: clamp(19px, 2.5cqi, 35px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.ash-quote p {
+  margin: 0;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 1.22;
+  white-space: nowrap;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(10, 40, 10, 0.35), 0 1px 2px rgba(10, 40, 10, 0.3);
+}
+
+.ash-quote-mark {
+  display: inline-block;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.45em;
+  font-style: normal;
+  line-height: 0;
+  vertical-align: -0.2em;
+  margin-right: 0.18em;
+}
+
+/* the second line sits a little in from the opening mark, and a touch bigger */
+.ash-quote-l2 {
+  margin-left: 0.6em;
+  font-size: 1.14em;
+}
+
+.ash-quote-close {
+  margin: 0 0 0 0.08em;
+}
+
+.ash-quote-hi { color: #fde047; }
+.ash-quote-dot { color: #fb7a1c; }
+
+.ash-quote-swoosh {
+  display: block;
+  width: 7.5em;
+  height: auto;
+  margin: 0.5em 0 0 2.2em;
+  filter: drop-shadow(0 2px 4px rgba(10, 40, 10, 0.25));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ash-btn { transition: none; }
+  .ash-btn:hover { transform: none; }
+}
+
+/* ---------- narrower banners ---------- */
+
+/* Laptop widths (a banner of ~830-1000px): the copy gets a little more room (it still ends before
+   the curve, which is furthest left at the bottom), the buttons tighten so they stay on one row,
+   and the photo slides right so the smaller quote clears the farmer. The slide only uncovers the
+   box's left edge, which the curve already hides. */
+@container (max-width: 1000px) {
+  .ash-copy {
+    width: 42%;
+    padding-left: 4.6cqi;
+  }
+
+  .ash-visual { left: 38%; }
+  .ash-photo { background-position: right -4cqi top 25%; }
+
+  .ash-actions { gap: 10px; }
+
+  .ash-btn {
+    padding: 0 1.1em;
+    font-size: clamp(12px, 1.5cqi, 14px);
+  }
+
+  .ash-quote {
+    left: 20%;
+    top: 18%;
+    font-size: clamp(16px, 2.15cqi, 22px);
+  }
+}
+
+/* Stacked: copy, then the photo full width (straight edges). */
+@container (max-width: 760px) {
+  .ash::before {
+    left: -30cqi;
+    top: -40cqi;
+    width: 80cqi;
+  }
+
+  .ash-top {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  .ash-copy {
+    width: auto;
+    padding: 26px 22px 24px;
+  }
+
+  .ash-title { font-size: clamp(28px, 7.4cqi, 44px); }
+  .ash-text { font-size: 14.5px; }
+
+  .ash-visual {
+    position: relative;
+    left: auto;
+    height: clamp(190px, 50cqi, 330px);
+  }
+
+  .ash-photo {
+    -webkit-clip-path: none;
+    clip-path: none;
+    background-position: 78% 30%;
+  }
+
+  /* a yellow-to-green band along the top edge instead of the curve */
+  .ash-curve { display: none; }
+
+  .ash-visual::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #22a447 0%, #a3e635 35%, #facc15 70%, #fde68a 100%);
+  }
+
+  .ash-quote {
+    left: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: clamp(16px, 4.4cqi, 27px);
+  }
+}
+
+@container (max-width: 420px) {
+  .ash-actions { gap: 10px; }
+  .ash-btn { padding: 0 1.3em; }
+
+  /* up in the open bokeh above the farmer's tablet */
+  .ash-quote {
+    left: 16px;
+    top: 10%;
+    transform: none;
+    font-size: clamp(13px, 4.2cqi, 16px);
+  }
+}

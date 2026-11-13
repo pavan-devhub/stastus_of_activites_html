@@ -1,0 +1,392 @@
+/* ==========================================================================
+   Activity overview  (prefix: ash-)
+   "Activity Overview": the four count cards under the hero, and the box a
+   card opens under them (its list is styled in activity-list.css). It lives
+   inside the hero banner (.ash), so the unnamed @container queries below
+   measure the banner. Each card is a size container of its own (ash-card),
+   so its insides scale with the card's width.
+   ========================================================================== */
+
+/* The counts and the box they open share the padding, gap and column count, so the box lines up
+   under them and its pointer can find the open count's column. The top padding sets the section
+   apart from the hero above it. */
+.ash-bottom {
+  --pad-l: 3.15cqi;
+  --pad-r: 2.9cqi;
+  --gap: clamp(12px, 1.65cqi, 24px);
+  --cols: 4;
+  padding: clamp(28px, 3.6cqi, 44px) var(--pad-r) clamp(16px, 1.65cqi, 24px) var(--pad-l);
+}
+
+/* "Activity Overview" - the same heading style as the board's sections below - and a hint that
+   the cards open */
+.ash-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 24px;
+  margin-bottom: clamp(16px, 2.1cqi, 26px);
+}
+
+.ash-section-title {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.25cqi, 14px);
+  margin: 0;
+  font-size: clamp(17px, 1.97cqi, 24px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #0d1b4b;
+}
+
+.ash-section-title::before {
+  content: '';
+  flex-shrink: 0;
+  width: 5px;
+  height: 1.25em;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #3ccb1c 0%, #149a0c 100%);
+}
+
+.ash-section-hint {
+  margin: 0;
+  font-size: clamp(12px, 1.22cqi, 13.5px);
+  color: #5b6478;
+}
+
+/* ---------- the four count cards ---------- */
+
+.ash-stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: var(--gap);
+}
+
+.ash-stats > li {
+  display: flex;
+  container: ash-card / inline-size;
+}
+
+/* Each count is a card button: a white card with a hairline border and a faint wash of its colour
+   in the top-right corner; the icon tile, number and label, and a chevron on top, then a slim
+   meter of its share of all activities and a caption. Hover lifts it; the open one takes its
+   colour - border, tint, a solid icon tile and a filled, turned chevron. */
+.ash-stat {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(14px, 8cqi, 20px);
+  border: 1px solid #e6e9f0;
+  border-radius: 16px;
+  background:
+    radial-gradient(70% 90% at 100% 0%, var(--wash) 0%, transparent 70%),
+    #fff;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 6px 16px -10px rgba(15, 23, 42, 0.12);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.ash-stat:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--icon) 30%, #e6e9f0);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 16px 28px -16px color-mix(in srgb, var(--glow) 50%, transparent);
+}
+
+.ash-stat:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--icon) 40%, transparent);
+  outline-offset: 3px;
+}
+
+.ash-stat.is-active {
+  border-color: var(--icon);
+  background:
+    radial-gradient(70% 90% at 100% 0%, var(--wash) 0%, transparent 70%),
+    linear-gradient(180deg, var(--soft) 0%, #fff 100%);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--icon) 14%, transparent),
+    0 16px 28px -16px color-mix(in srgb, var(--glow) 55%, transparent);
+}
+
+/* colours of each count, and of the box it opens */
+.ash-tone-orange {
+  --icon: #ea580c;
+  --glow: #f2781e;
+  --tint: #fff1e6;
+  --wash: rgba(234, 88, 12, 0.08);
+  --soft: #fff8f3;
+  --panel-top: #fff4ea;
+}
+
+.ash-tone-green {
+  --icon: #16a34a;
+  --glow: #3cbe28;
+  --tint: #e7f7ec;
+  --wash: rgba(22, 163, 74, 0.08);
+  --soft: #f4fbf6;
+  --panel-top: #f1fbec;
+}
+
+.ash-tone-blue {
+  --icon: #2563eb;
+  --glow: #2878f0;
+  --tint: #e8f0fe;
+  --wash: rgba(37, 99, 235, 0.08);
+  --soft: #f4f8ff;
+  --panel-top: #eef5ff;
+}
+
+.ash-tone-purple {
+  --icon: #7c3aed;
+  --glow: #963cf0;
+  --tint: #f2ebfe;
+  --wash: rgba(124, 58, 237, 0.08);
+  --soft: #faf6ff;
+  --panel-top: #f6effe;
+}
+
+/* icon tile | number over label (the chevron sits in the corner, clear of the label) */
+.ash-stat-top {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
+}
+
+.ash-stat-icon {
+  display: grid;
+  place-items: center;
+  width: clamp(38px, 20cqi, 46px);
+  aspect-ratio: 1;
+  border-radius: 12px;
+  color: var(--icon);
+  background: var(--tint);
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.ash-stat.is-active .ash-stat-icon {
+  color: #fff;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--icon) 72%, #fff) 0%, var(--icon) 100%);
+  box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--icon) 70%, transparent);
+}
+
+.ash-stat-svg {
+  width: 52%;
+  height: 52%;
+}
+
+.ash-stat-svg-progress {
+  animation: ash-turn 9s linear infinite;
+}
+
+@keyframes ash-turn {
+  to { transform: rotate(360deg); }
+}
+
+.ash-stat-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ash-stat-text strong {
+  font-size: clamp(24px, 13cqi, 32px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #0d1b4b;
+}
+
+.ash-stat-text span {
+  margin-top: 5px;
+  overflow: hidden;
+  font-size: clamp(12.5px, 6.2cqi, 14px);
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #5b6478;
+}
+
+.ash-stat-chevron {
+  position: absolute;
+  top: clamp(12px, 7cqi, 16px);
+  right: clamp(12px, 7cqi, 16px);
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: #6b7489;
+  background: #f3f5f8;
+  transition: transform 0.2s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+.ash-stat-chevron svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ash-stat:hover .ash-stat-chevron {
+  color: var(--icon);
+  background: var(--tint);
+}
+
+.ash-stat.is-active .ash-stat-chevron {
+  color: #fff;
+  background: var(--icon);
+  transform: rotate(180deg);
+}
+
+/* the meter: this count's share of all activities - for Total, the completed / in progress /
+   upcoming split in the donut's colours */
+.ash-meter {
+  display: flex;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #edf0f4;
+}
+
+.ash-meter-fill {
+  border-radius: inherit;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--icon) 55%, #fff) 0%, var(--icon) 100%);
+}
+
+.ash-meter-split {
+  gap: 2px;
+  background: transparent;
+}
+
+.ash-meter-split > span { flex-basis: 0; }
+.ash-meter-done { background: var(--status-completed); }
+.ash-meter-progress { background: var(--status-progress); }
+.ash-meter-upcoming { background: var(--status-upcoming); }
+
+.ash-stat-caption {
+  margin-top: -6px;
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: #6b7489;
+}
+
+/* A narrow card (two by two on a phone): the icon tile on top, the figures under it. */
+@container ash-card (max-width: 190px) {
+  .ash-stat-top {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    row-gap: 12px;
+  }
+
+  .ash-stat-text { justify-self: stretch; }
+  .ash-stat-text span { white-space: normal; }
+  .ash-stat-caption { font-size: 11.5px; }
+}
+
+/* the narrowest phones (folded, ~280px): a little less padding so every label fits whole */
+@container ash-card (max-width: 120px) {
+  .ash-stat { padding: 12px 10px; }
+
+  .ash-stat-text span {
+    font-size: 11.5px;
+    overflow-wrap: anywhere;
+  }
+
+  .ash-stat-chevron {
+    top: 10px;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* ---------- the box a count opens ---------- */
+
+/* A white card outlined in the count's colour, a faint tint of it across the top, a soft shadow,
+   and an outlined pointer up at the open count. --col4 / --col2 (set by the script) say which
+   column the open count is in, four across or two by two. */
+.ash-panel {
+  --col: var(--col4);
+  --edge: color-mix(in srgb, var(--icon) 28%, #e3e7ee);
+  position: relative;
+  min-height: clamp(180px, 20cqi, 260px);
+  margin-top: calc(var(--gap) + 12px);
+  border: 1px solid var(--edge);
+  border-radius: clamp(14px, 1.5cqi, 18px);
+  background: linear-gradient(180deg, var(--panel-top) 0px, #fff 96px);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 18px 38px -18px rgba(15, 23, 42, 0.2);
+  animation: ash-panel-in 0.28s ease both;
+}
+
+.ash-panel[hidden] {
+  display: none;
+}
+
+/* pointer up at the open count - the middle of its column. A square turned 45deg, outlined on its
+   two upper sides; its lower half (the box's top tint) hides the box's top border under it. */
+.ash-panel::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: -8.5px;
+  left: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols) * (var(--col) + 0.5) + var(--gap) * var(--col));
+  width: 16px;
+  height: 16px;
+  border-top: 1px solid var(--edge);
+  border-left: 1px solid var(--edge);
+  border-top-left-radius: 2px;
+  background: var(--panel-top);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+@keyframes ash-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ash-stat-svg-progress,
+  .ash-panel { animation: none; }
+  .ash-stat,
+  .ash-stat-chevron { transition: none; }
+  .ash-stat:hover,
+  .ash-stat.is-active { transform: none; }
+}
+
+/* ---------- narrower banners ---------- */
+
+@container (max-width: 1000px) {
+  .ash-bottom {
+    --pad-l: 2.6cqi;
+    --pad-r: 2.6cqi;
+    --gap: 12px;
+  }
+}
+
+/* the counts two by two; the pointer goes by the count's column in that grid */
+@container (max-width: 760px) {
+  .ash-bottom {
+    --cols: 2;
+    --gap: 12px;
+    padding: 28px 18px 18px;
+  }
+
+  .ash-panel { --col: var(--col2); }
+}
